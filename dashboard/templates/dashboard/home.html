@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CyberDefender Dashboard</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #0b132b;
+            color: #fefefe;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px;
+        }
+        h1 {
+            color: #00bcd4;
+            margin-bottom: 10px;
+        }
+        p {
+            color: #ddd;
+            margin-bottom: 20px;
+        }
+        .user-info {
+            color: #aaa;
+            font-size: 0.9em;
+            margin-bottom: 15px;
+        }
+        .user-info strong {
+            color: #00bcd4;
+        }
+        .btn {
+            background-color: #00bcd4;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            cursor: pointer;
+            text-decoration: none;
+            font-size: 1em;
+            display: inline-block;
+            transition: background-color 0.3s;
+            margin: 0 8px;
+        }
+        .btn:hover {
+            background-color: #0097a7;
+        }
+        .btn.logout {
+            background-color: #ff4081;
+        }
+        .btn.logout:hover {
+            background-color: #e03570;
+        }
+        .button-group {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .logout-form {
+            display: inline;
+        }
+        .ip-check {
+            background: #1c2541;
+            padding: 25px;
+            border-radius: 12px;
+            max-width: 500px;
+            width: 100%;
+            box-shadow: 0 4px 12px rgba(0, 191, 255, 0.1);
+        }
+        .ip-check h3 {
+            color: #00bcd4;
+            margin-top: 0;
+        }
+        .ip-check input {
+            width: 100%;
+            padding: 12px;
+            margin: 10px 0;
+            border-radius: 6px;
+            border: 1px solid #444;
+            background: #2d3748;
+            color: white;
+            font-size: 1em;
+        }
+        .ip-check button {
+            background: #ff9800;
+            width: 100%;
+            margin-top: 10px;
+        }
+        .ip-check button:hover {
+            background: #f57c00;
+        }
+    </style>
+</head>
+<body>
+    <h1>CyberDefender Dashboard</h1>
+    <p>Welcome, Defender! This is your first Django web page.</p>
+
+    <!-- Show username when logged in -->
+    {% if user.is_authenticated %}
+        <div class="user-info">
+            Logged in as <strong>{{ user.username }}</strong>
+        </div>
+    {% endif %}
+
+    <!-- Button Group -->
+    <div class="button-group">
+        <a href="/alerts"><button class="btn">View Security Alerts</button></a>
+
+        {% if user.is_authenticated %}
+            <a href="/add/"><button class="btn" style="background: #4caf50; margin: 0 8px;">Report Incident</button></a>
+            <form method="post" action="/logout/" class="logout-form">
+                {% csrf_token %}
+                <button type="submit" class="btn logout">Logout</button>
+            </form>
+        {% endif %}
+    </div>
+
+    <!-- IP Reputation Checker (Only for logged-in users) -->
+    {% if user.is_authenticated %}
+    <div class="ip-check">
+        <h3>Check IP Reputation</h3>
+        <form method="post" action="/check-ip/">
+            {% csrf_token %}
+            <input name="ip" placeholder="Enter IP (e.g. 8.8.8.8)" required>
+            <button type="submit">Check Threat Level</button>
+        </form>
+    </div>
+    {% endif %}
+
+</body>
+</html>

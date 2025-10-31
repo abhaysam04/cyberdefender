@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Security Alerts - CyberDefender</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        body { background: #0b132b; color: white; font-family: 'Courier New'; padding: 20px; margin: 0; }
+        .container { max-width: 1000px; margin: 0 auto; }
+        h1 { color: #00bcd4; text-align: center; margin: 20px 0; }
+        .chart-container { background: #1c2541; padding: 20px; border-radius: 12px; margin: 20px 0; text-align: center; }
+        canvas { max-width: 400px; margin: 0 auto; display: block; }
+        .alert { background: #1c2541; border-left: 6px solid; padding: 18px; margin: 15px 0; border-radius: 12px; }
+        .Critical { border-color: #ff4081; }
+        .High { border-color: #ff9800; }
+        .Medium { border-color: #ffc107; }
+        .Low { border-color: #4caf50; }
+        .alert h3 { margin: 0 0 10px; color: #00bcd4; }
+        .alert p { margin: 8px 0; white-space: pre-wrap; font-size: 0.95em; }
+        .alert small { color: #aaa; }
+        .back { text-align: center; margin: 30px 0; }
+        .back a { color: #00bcd4; text-decoration: none; font-weight: bold; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Security Alerts</h1>
+
+        <div class="chart-container">
+            <canvas id="severityChart"></canvas>
+        </div>
+
+        {% for alert in alerts %}
+        <div class="alert {{ alert.severity }}">
+            <h3>[{{ alert.severity }}] {{ alert.title }}</h3>
+            <p>{{ alert.description }}</p>
+            <small>Reported by: {{ alert.reported_by }} | {{ alert.date_reported|date:"M d, Y H:i" }}</small>
+        </div>
+        {% empty %}
+        <p style="text-align: center; color: #aaa;">No alerts yet.</p>
+        {% endfor %}
+
+        <div class="back">
+            <a href="/">Back to Dashboard</a>
+        </div>
+    </div>
+
+    <script>
+        new Chart(document.getElementById('severityChart'), {
+            type: 'doughnut',
+            data: {
+                labels: ['Critical', 'High', 'Medium', 'Low'],
+                datasets: [{
+                    data: [{{ critical }}, {{ high }}, {{ medium }}, {{ low }}],
+                    backgroundColor: ['#ff4081', '#ff9800', '#ffc107', '#4caf50']
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: { position: 'bottom', labels: { color: 'white' } },
+                    title: { display: true, text: 'Threat Severity', color: '#00bcd4' }
+                }
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>IP Reputation - CyberDefender</title>
+    <style>
+        body { 
+            background: #0b132b; color: white; font-family: 'Courier New', monospace; 
+            padding: 30px; text-align: center; 
+        }
+        .container { max-width: 600px; margin: 0 auto; }
+        h1 { color: #00bcd4; }
+        .result { 
+            margin: 30px auto; padding: 25px; border-radius: 12px; 
+            background: #1c2541; box-shadow: 0 0 15px rgba(0,191,255,0.2);
+        }
+        .clean { border-left: 6px solid #4caf50; }
+        .malicious { border-left: 6px solid #ff4081; }
+        .error { border-left: 6px solid #ff9800; }
+        p { margin: 12px 0; font-size: 1.1em; }
+        strong { color: #00bcd4; }
+        a { color: #00bcd4; text-decoration: none; font-weight: bold; }
+        a:hover { text-decoration: underline; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>IP Reputation Check</h1>
+
+        {% if result.error %}
+            <div class="result error">
+                <p><strong>Error:</strong> {{ result.error }}</p>
+            </div>
+        {% elif result %}
+            <div class="result {% if result.is_malicious %}malicious{% else %}clean{% endif %}">
+                <h2>{{ result.ip }}</h2>
+                <p><strong>Threat Score:</strong> <span style="color: {% if result.score >= 75 %}#ff4081{% else %}#4caf50{% endif %};">{{ result.score }}%</span></p>
+                <p><strong>Country:</strong> {{ result.country }}</p>
+                <p><strong>ISP:</strong> {{ result.isp }}</p>
+                <p><strong>Reports (90 days):</strong> {{ result.reports }}</p>
+                <p><strong>Status:</strong> 
+                    {% if result.is_malicious %}
+                        <span style="color: #ff4081; font-weight: bold;">MALICIOUS — BLOCK NOW</span>
+                    {% else %}
+                        <span style="color: #4caf50;">Clean</span>
+                    {% endif %}
+                </p>
+            </div>
+        {% endif %}
+
+        <p><a href="/">← Back to Dashboard</a></p>
+    </div>
+</body>
+</html>
