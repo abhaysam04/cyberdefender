@@ -1,1 +1,1 @@
-web: gunicorn cyberdefender.wsgi --log-file -
+web: gunicorn cyberdefender.wsgi
