@@ -1,8 +1,10 @@
 from django.contrib import admin
-from .models import SecurityAlert
+from .models import Alert
 
-@admin.register(SecurityAlert)
-class SecurityAlertAdmin(admin.ModelAdmin):
-    list_display = ('title', 'severity', 'date_reported')
+@admin.register(Alert)
+class AlertAdmin(admin.ModelAdmin):
+    list_display = ('title', 'severity', 'date_reported', 'reported_by', 'source_ip')
+    list_filter = ('severity', 'date_reported')
     search_fields = ('title', 'description')
-    list_filter = ('severity',)
+    readonly_fields = ('date_reported',)
+

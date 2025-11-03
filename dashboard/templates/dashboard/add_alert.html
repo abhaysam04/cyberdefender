@@ -1,55 +1,30 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <meta charset="UTF-8">
-    <title>Report Incident - CyberDefender</title>
-    <style>
-        body { background: #0b132b; color: #eee; font-family: 'Courier New', monospace; padding: 30px; }
-        h1 { color: #00bcd4; text-align: center; font-size: 1.8em; }
-        form { max-width: 600px; margin: 30px auto; background: #1c2541; padding: 30px; border-radius: 12px; box-shadow: 0 0 20px rgba(0, 191, 255, 0.1); }
-        label { display: block; margin: 18px 0 6px; font-weight: bold; color: #00bcd4; }
-        input, textarea, select { 
-            width: 100%; padding: 12px; background: #2d3748; border: 1px solid #4a5568; 
-            border-radius: 6px; color: white; font-family: inherit; 
-        }
-        textarea { resize: vertical; min-height: 100px; }
-        button { 
-            background: #00bcd4; color: white; padding: 14px 24px; border: none; 
-            border-radius: 8px; cursor: pointer; font-weight: bold; font-size: 1.1em; 
-            margin-top: 20px; width: 100%;
-        }
-        button:hover { background: #0097a7; }
-        .back { text-align: center; margin-top: 25px; }
-        .back a { color: #00bcd4; text-decoration: none; font-weight: bold; }
-        .back a:hover { text-decoration: underline; }
-    </style>
-</head>
-<body>
-    <h1>REPORT SECURITY INCIDENT</h1>
-    <form method="post">
+{% extends 'dashboard/base.html' %}
+{% block title %}Report Incident{% endblock %}
+
+{% block content %}
+<h2 class="text-2xl font-bold text-cyan-300 text-center mb-8">Report New Incident</h2>
+
+<div class="glass p-8 max-w-2xl mx-auto">
+    <form method="post" class="space-y-6">
         {% csrf_token %}
-        <label>Title</label>
-        <input name="title" placeholder="e.g. Phishing Email from support@fakebank.com" required>
-
-        <label>Description</label>
-        <textarea name="description" rows="4" placeholder="Include: sender, subject, attachments, user clicked? Any logs?" required></textarea>
-
-        <label>Severity</label>
-        <select name="severity">
-            <option value="Low">Low - Monitoring Only</option>
-            <option value="Medium" selected>Medium - Investigate</option>
-            <option value="High">High - Escalate to Lead</option>
-            <option value="Critical">Critical - Immediate Action Required</option>
+        <input name="title" placeholder="Incident Title" required
+               class="w-full p-4 bg-gray-900 border border-cyan-500 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-cyan-400">
+        <textarea name="description" placeholder="Detailed Description" rows="5" required
+                  class="w-full p-4 bg-gray-900 border border-cyan-500 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-cyan-400"></textarea>
+        <select name="severity" required
+                class="w-full p-4 bg-gray-900 border border-cyan-500 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-cyan-400">
+            <option value="">Select Severity</option>
+            <option value="Low">Low</option>
+            <option value="Medium">Medium</option>
+            <option value="High">High</option>
+            <option value="Critical">Critical</option>
         </select>
-
-        <label>Source IP (if known)</label>
-        <input name="source_ip" placeholder="e.g. 185.220.101.12">
-
-        <label>Reported By</label>
-        <input name="reported_by" placeholder="Your Name / Team" value="{{ user.username }}">
-
-        <button type="submit">SUBMIT INCIDENT REPORT</button>
+        <input name="source_ip" placeholder="Source IP (optional)"
+               class="w-full p-4 bg-gray-900 border border-cyan-500 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-cyan-400">
+        <button type="submit" class="btn btn-green w-full">Submit Alert</button>
     </form>
-    <div class="back"><a href="/alerts">Back to Alerts Dashboard</a></div>
-</body>
-</html>
+    <div class="text-center mt-6">
+        <a href="/" class="text-cyan-400 hover:underline">Back to Dashboard</a>
+    </div>
+</div>
+{% endblock %}

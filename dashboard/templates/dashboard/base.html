@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}CyberDefender SOC{% endblock %}</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700&family=Inter:wght@400;600&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+   <style>
+    :root {
+        --bg: #0a0e17;
+        --card: rgba(20, 25, 40, 0.8);
+        --border: rgba(0, 188, 212, 0.5);
+        --accent: #00d4ff;
+        --red: #ff3366;
+        --green: #00ff88;
+        --orange: #ffaa00;
+        --glow: 0 0 30px rgba(0, 212, 255, 0.8);
+        --glow-red: 0 0 30px rgba(255, 51, 102, 0.8);
+        --glow-orange: 0 0 25px rgba(255, 170, 0, 0.7);
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+        background: var(--bg);
+        color: #e0f7ff;
+        font-family: 'Inter', sans-serif;
+        min-height: 100vh;
+        background-image: 
+            radial-gradient(circle at 15% 25%, rgba(0, 212, 255, 0.2) 0%, transparent 25%),
+            radial-gradient(circle at 85% 75%, rgba(255, 51, 102, 0.2) 0%, transparent 25%);
+    }
+    .glass {
+        background: var(--card);
+        backdrop-filter: blur(16px);
+        -webkit-backdrop-filter: blur(16px);
+        border: 1.5px solid var(--border);
+        border-radius: 20px;
+        box-shadow: var(--glow), inset 0 1px 0 rgba(255,255,255,0.15);
+        transition: all 0.4s ease;
+    }
+    .glass:hover { transform: translateY(-8px); box-shadow: 0 0 50px rgba(0, 212, 255, 0.9); }
+
+    /* === NEON HEADER === */
+    .header h1 {
+        font-family: 'Orbitron', sans-serif;
+        font-size: 5.5rem;
+        font-weight: 900;
+        background: linear-gradient(90deg, #00d4ff, #ff3366, #00ff88, #00d4ff);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        text-shadow: 0 0 40px rgba(0, 212, 255, 0.8), 0 0 80px rgba(255, 51, 102, 0.6);
+        animation: neonPulse 2.5s infinite;
+        letter-spacing: 8px;
+    }
+    @keyframes neonPulse {
+        0%, 100% { text-shadow: 0 0 40px rgba(0, 212, 255, 0.8), 0 0 80px rgba(255, 51, 102, 0.6); }
+        50% { text-shadow: 0 0 60px rgba(0, 212, 255, 1), 0 0 100px rgba(255, 51, 102, 0.9); }
+    }
+
+    .terminal {
+        font-family: 'Courier New', monospace;
+        background: #000;
+        color: #0f0;
+        padding: 8px 16px;
+        border-radius: 10px;
+        font-size: 1.1rem;
+        font-weight: bold;
+        box-shadow: 0 0 20px rgba(0, 255, 0, 0.6);
+        display: inline-block;
+        border: 1px solid #0f0;
+        animation: blink 1.5s infinite;
+    }
+    @keyframes blink {
+        0%, 100% { opacity: 1; }
+        50% { opacity: 0.7; }
+    }
+
+    .btn {
+        padding: 16px 32px;
+        border-radius: 16px;
+        font-weight: 800;
+        text-transform: uppercase;
+        letter-spacing: 2px;
+        transition: all 0.3s;
+        border: none;
+        cursor: pointer;
+        box-shadow: var(--glow);
+        font-size: 1.2rem;
+    }
+    .btn-cyan { background: linear-gradient(45deg, #00d4ff, #00aaff); color: white; }
+    .btn-green { background: linear-gradient(45deg, #00ff88, #00cc66); color: #000; }
+    .btn-red { background: linear-gradient(45deg, #ff3366, #cc0033); color: white; }
+    .btn-orange { background: linear-gradient(45deg, #ffaa00, #cc8800); color: #000; }
+    .btn:hover { transform: scale(1.1); box-shadow: 0 0 40px rgba(0, 212, 255, 1); }
+
+    /* Severity Glow */
+    .severity-critical { border-left: 6px solid #ff3366; box-shadow: 0 0 30px rgba(255, 51, 102, 0.5); }
+    .severity-high     { border-left: 6px solid #ffaa00; box-shadow: 0 0 25px rgba(255, 170, 0, 0.5); }
+    .severity-medium   { border-left: 6px solid #ffff00; box-shadow: 0 0 20px rgba(255, 255, 0, 0.4); }
+    .severity-low      { border-left: 6px solid #00ff88; box-shadow: 0 0 15px rgba(0, 255, 136, 0.4); }
+
+    .chart-container {
+        max-width: 400px;
+        margin: 0 auto;
+        padding: 20px;
+    }
+@keyframes pulse-fast {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.7; }
+}
+.animate-pulse-fast { animation: pulse-fast 1s infinite; }
+
+.severity-critical { border-left: 8px solid #ff3366; }
+.severity-high     { border-left: 8px solid #ffaa00; }
+.severity-medium   { border-left: 8px solid #ffff00; }
+.severity-low      { border-left: 8px solid #00ff88; }
+
+@keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.6; } }
+@keyframes pulse-fast { 0%, 100% { opacity: 1; } 50% { opacity: 0.4; } }
+.animate-pulse { animation: pulse 1.5s infinite; }
+.animate-pulse-fast { animation: pulse-fast 0.8s infinite; }
+
+.chart-container {
+    max-width: 420px;
+    padding: 24px;
+}
+
+</style>
+
+</head>
+<body class="antialiased">
+    <div class="container mx-auto px-4 py-8 max-w-6xl">
+      <header class="text-center mb-14">
+    <h1 class="header">CYBERDEFENDER</h1>
+    <p class="text-cyan-300 text-2xl font-light tracking-wider">Real-Time SOC Intelligence Platform</p>
+    {% if user.is_authenticated %}
+        <p class="mt-4">
+            <span class="terminal">{{ user.username }}@cyberdefender:~#</span>
+            <span class="text-cyan-400 ml-2">ACCESS GRANTED</span>
+        </p>
+    {% endif %}
+</header>
+
+
+        {% block content %}{% endblock %}
+
+        <footer class="text-center mt-16 text-gray-500 text-sm">
+            Powered by <span class="text-cyan-400">AbuseIPDB</span> • <span class="text-purple-400">Django</span> • <span class="text-green-400">Heroku</span>
+        </footer>
+    </div>
+</body>
+</html>
