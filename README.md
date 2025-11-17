@@ -69,7 +69,7 @@ Use these demo credentials to explore the dashboard:
 makefile
 Copy code
 Username: admin  
-Password: admin123
+Password: cyber2025!
 ⚠️ Note: These credentials are for demo purposes only and do not provide access to any real data or systems.
 
 🧑‍💻 Author
